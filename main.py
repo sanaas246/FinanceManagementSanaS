@@ -15,13 +15,9 @@ users = json.loads(user_from_file)
 # VARIABLES
 foundUserLi = [ ]
 
-
-
-
 # FUNCTIONS
 # Save to JSON
-def addtojson(variable):
-    users.append(variable)
+def addtojson():
     users_json = json.dumps(users)
     file = open("users.txt", "w")
     file.write(users_json)
@@ -71,7 +67,10 @@ def loginmenu():
         login()
     elif regOrLog == "register":
         newuser = register()
-        addtojson(newuser)
+        users.append(newuser)
+        addtojson()
+        print("Please confirm username and password.")
+        login() 
         mainmenu()
 
 # Menu selection functions
@@ -80,7 +79,27 @@ def displayall():
     print("Date: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
 
 def withdraw():
-    pass
+    withdrawalsum = input("How much money would you like to withdraw? ")
+    if int(withdrawalsum) > int(users[foundUserLi[0]]["total"][0]):
+        print("Withdrawal amount larger than account total. Withdrawal cannot be made.")
+    else:
+        users[foundUserLi[0]]["total"][1] = input("What month is this withdrawal occuring? ")
+        users[foundUserLi[0]]["total"][2] = input("What year is this withdrawal occuring? ")
+        users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) - int(withdrawalsum)
+        print("Withdrawal Amount:",withdrawalsum)
+        print("New Total:",users[foundUserLi[0]]["total"][0])
+        print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
+        addtojson()
+
+def deposit():
+    depositsum = input("How much money would you like to deposit? ")
+    users[foundUserLi[0]]["total"][1] = input("What month is this withdrawal occuring? ")
+    users[foundUserLi[0]]["total"][2] = input("What year is this withdrawal occuring? ")
+    users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) + int(depositsum)
+    print("Deposit Amount:",depositsum)
+    print("New Total:",users[foundUserLi[0]]["total"][0])
+    print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
+    addtojson()
 
 # Main menu functions 
 def getMenuSelection():
@@ -88,7 +107,8 @@ def getMenuSelection():
     print(f"\n********MAIN MENU********")
     print("1. Display all trasactions")
     print("2. Withdraw money")
-    print("3. Exit")
+    print("3. Deposit money")
+    print("4. Exit")
     return input("\nChoose an option please: ").lower()
 
 def mainmenu():
@@ -97,10 +117,12 @@ def mainmenu():
         selection = getMenuSelection()
 
         if selection == "1" or selection == "display all trasactions":
-            displayall() # all money, amount of money, when it was lost
+            displayall() 
         elif selection == "2" or selection == "withdraw money":
             withdraw()
-        elif selection == "3" or selection == "exit":
+        elif selection == "3" or selection == "deposit money":
+            deposit()
+        elif selection == "4" or selection == "exit":
             loop = False
             print("Bye!")
         

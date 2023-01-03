@@ -1,12 +1,1 @@
-[{
-    "username": "sana",
-    "password": "sid"
-    },
-{
-    "username": "bill",
-    "password": "nye"
-    },
-{
-    "username": "bob",
-    "password": "joe"
-}]
+[{"username": "pablo", "password": "the penguin"}, [{"username": "sana", "password": "siddiqui penguin"}], [{"username": "sana", "password": "siddiqui"}], {"username": "saad", "password": "sid", "total": [["50", "january", "2023"]]}]

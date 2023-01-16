@@ -4,7 +4,6 @@ import json
 
 # DICTIONARY
 # Users
-
 # Save users using JSON
 file = open("users.txt", "r")
 user_from_file = file.read()
@@ -23,6 +22,64 @@ def addtojson():
     file.write(users_json)
     file.close()
 
+class Menu:
+    def __init__(self):
+        self.loop = True
+
+    # Menu selection functions
+    def displayall(self):
+        print("Deposit: ",users[foundUserLi[0]]["total"][0])
+        print("Date: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
+
+    def withdraw(self):
+        withdrawalsum = input("How much money would you like to withdraw? ")
+        if int(withdrawalsum) > int(users[foundUserLi[0]]["total"][0]):
+            print("Withdrawal amount larger than account total. Withdrawal cannot be made.")
+        else:
+            users[foundUserLi[0]]["total"][1] = input("What month is this withdrawal occuring? ")
+            users[foundUserLi[0]]["total"][2] = input("What year is this withdrawal occuring? ")
+            users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) - int(withdrawalsum)
+            print("Withdrawal Amount:",withdrawalsum)
+            print("New Total:",users[foundUserLi[0]]["total"][0])
+            print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
+            addtojson()
+
+    def deposit(self):
+        depositsum = input("How much money would you like to deposit? ")
+        users[foundUserLi[0]]["total"][1] = input("What month is this withdrawal occuring? ")
+        users[foundUserLi[0]]["total"][2] = input("What year is this withdrawal occuring? ")
+        users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) + int(depositsum)
+        print("Deposit Amount:",depositsum)
+        print("New Total:",users[foundUserLi[0]]["total"][0])
+        print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
+        addtojson()
+
+    # Main menu functions 
+    def getMenuSelection(self):
+        # Menu Options
+        print(f"\n********MAIN MENU********")
+        print("1. Display all trasactions")
+        print("2. Withdraw money")
+        print("3. Deposit money")
+        print("4. Exit")
+        return input("\nChoose an option please: ").lower()
+
+    def mainmenu(self):
+        self.loop = True
+        while self.loop:
+            selection = self.getMenuSelection()
+
+            if selection == "1" or selection == "display all trasactions":
+                self.displayall() 
+            elif selection == "2" or selection == "withdraw money":
+                self.withdraw()
+            elif selection == "3" or selection == "deposit money":
+                self.deposit()
+            elif selection == "4" or selection == "exit":
+                self.loop = False
+                print("Bye!")
+
+menu = Menu()
 
 # Find the username or password
 def findInfo(array, info, item): 
@@ -54,10 +111,10 @@ def login():
         foundPass = findInfo(users, "password", passwordInput)
         if foundPass != -1:
             print("Correct password")
-            mainmenu()
+            menu.mainmenu()
         else: 
-            print("Wrong Password! Try again!")
-            login()
+            print("Wrong Password!")
+            loginmenu()
     else:
         print("No account found.")
         loginmenu()
@@ -72,60 +129,7 @@ def loginmenu():
         addtojson()
         print("Please confirm username and password.")
         login() 
-        mainmenu()
-
-# Menu selection functions
-def displayall():
-    print("Deposit: ",users[foundUserLi[0]]["total"][0])
-    print("Date: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
-
-def withdraw():
-    withdrawalsum = input("How much money would you like to withdraw? ")
-    if int(withdrawalsum) > int(users[foundUserLi[0]]["total"][0]):
-        print("Withdrawal amount larger than account total. Withdrawal cannot be made.")
-    else:
-        users[foundUserLi[0]]["total"][1] = input("What month is this withdrawal occuring? ")
-        users[foundUserLi[0]]["total"][2] = input("What year is this withdrawal occuring? ")
-        users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) - int(withdrawalsum)
-        print("Withdrawal Amount:",withdrawalsum)
-        print("New Total:",users[foundUserLi[0]]["total"][0])
-        print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
-        addtojson()
-
-def deposit():
-    depositsum = input("How much money would you like to deposit? ")
-    users[foundUserLi[0]]["total"][1] = input("What month is this withdrawal occuring? ")
-    users[foundUserLi[0]]["total"][2] = input("What year is this withdrawal occuring? ")
-    users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) + int(depositsum)
-    print("Deposit Amount:",depositsum)
-    print("New Total:",users[foundUserLi[0]]["total"][0])
-    print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
-    addtojson()
-
-# Main menu functions 
-def getMenuSelection():
-    # Menu Options
-    print(f"\n********MAIN MENU********")
-    print("1. Display all trasactions")
-    print("2. Withdraw money")
-    print("3. Deposit money")
-    print("4. Exit")
-    return input("\nChoose an option please: ").lower()
-
-def mainmenu():
-    loop = True
-    while loop:
-        selection = getMenuSelection()
-
-        if selection == "1" or selection == "display all trasactions":
-            displayall() 
-        elif selection == "2" or selection == "withdraw money":
-            withdraw()
-        elif selection == "3" or selection == "deposit money":
-            deposit()
-        elif selection == "4" or selection == "exit":
-            loop = False
-            print("Bye!")
+        menu.mainmenu()
         
 # Main Code Function
 def main():

@@ -23,6 +23,7 @@ def addtojson():
     file.write(users_json)
     file.close()
 
+
 # Find the username or password
 def findInfo(array, info, item): 
     for i in range(len(array)):

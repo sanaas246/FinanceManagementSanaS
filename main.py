@@ -26,11 +26,19 @@ class Menu:
     def __init__(self):
         self.loop = True
 
+    def searchuser(self, whatuser):
+        for i in range(len(users)):
+            if users[i]["username"] == whatuser:
+                return i
+        return -1
+
     # Menu selection functions
+    # Display Account Info
     def displayall(self):
         print("Deposit: ",users[foundUserLi[0]]["total"][0])
         print("Date: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
 
+    # Take out money and when it is occurring 
     def withdraw(self):
         withdrawalsum = input("How much money would you like to withdraw? ")
         if int(withdrawalsum) > int(users[foundUserLi[0]]["total"][0]):
@@ -44,6 +52,7 @@ class Menu:
             print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
             addtojson()
 
+    # Deposit money and when it is occurring 
     def deposit(self):
         depositsum = input("How much money would you like to deposit? ")
         users[foundUserLi[0]]["total"][1] = input("What month is this withdrawal occuring? ")
@@ -54,6 +63,29 @@ class Menu:
         print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
         addtojson()
 
+    # Transfer money to a different account
+    def transfer(self):
+        transfersum = input("How much money would you like to transfer? ")
+        if int(transfersum) > int(users[foundUserLi[0]]["total"][0]):
+            print("Transfer amount too large.")
+        else:
+            transfermonth = input("When is this transfer taking place? ")
+            transferyear = input("What year is this transfer occurring? ")
+            transferperson = input("Who are you transferring money to? ")
+            index = self.searchuser(transferperson)
+            if index != -1:
+                users[index]["total"][1] = transfermonth
+                users[index]["total"][2] = transferyear
+                users[index]["total"][0] = int(users[foundUserLi[0]]["total"][0]) + int(transfersum)
+                users[foundUserLi[0]]["total"][1] = transfermonth
+                users[foundUserLi[0]]["total"][2] = transferyear
+                users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) - int(transfersum)
+                print("Transfer completed.")
+            else:
+                print(index)
+                print("User not found.")
+
+
     # Main menu functions 
     def getMenuSelection(self):
         # Menu Options
@@ -61,7 +93,8 @@ class Menu:
         print("1. Display all trasactions")
         print("2. Withdraw money")
         print("3. Deposit money")
-        print("4. Exit")
+        print("4. Transfer Money to Another User")
+        print("5. Exit")
         return input("\nChoose an option please: ").lower()
 
     def mainmenu(self):
@@ -75,6 +108,8 @@ class Menu:
                 self.withdraw()
             elif selection == "3" or selection == "deposit money":
                 self.deposit()
+            elif selection == "4" or selection == "transfer money to another user":
+                self.transfer()
             elif selection == "4" or selection == "exit":
                 self.loop = False
                 print("Bye!")

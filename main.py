@@ -26,6 +26,7 @@ class Menu:
     def __init__(self):
         self.loop = True
 
+    # Find users in JSON list
     def searchuser(self, whatuser):
         for i in range(len(users)):
             if users[i]["username"] == whatuser:
@@ -69,14 +70,16 @@ class Menu:
         if int(transfersum) > int(users[foundUserLi[0]]["total"][0]):
             print("Transfer amount too large.")
         else:
+            # If the sum being transferred is smaller than the total account sum
             transfermonth = input("When is this transfer taking place? ")
             transferyear = input("What year is this transfer occurring? ")
             transferperson = input("Who are you transferring money to? ")
             index = self.searchuser(transferperson)
+            # If the user is found, add money to their account, remove money from user account
             if index != -1:
                 users[index]["total"][1] = transfermonth
                 users[index]["total"][2] = transferyear
-                users[index]["total"][0] = int(users[foundUserLi[0]]["total"][0]) + int(transfersum)
+                users[index]["total"][0] = int(users[index]["total"][0]) + int(transfersum)
                 users[foundUserLi[0]]["total"][1] = transfermonth
                 users[foundUserLi[0]]["total"][2] = transferyear
                 users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) - int(transfersum)
@@ -88,7 +91,7 @@ class Menu:
 
     # Main menu functions 
     def getMenuSelection(self):
-        # Menu Options
+        # Menu Options Display
         print(f"\n********MAIN MENU********")
         print("1. Display all trasactions")
         print("2. Withdraw money")
@@ -96,7 +99,8 @@ class Menu:
         print("4. Transfer Money to Another User")
         print("5. Exit")
         return input("\nChoose an option please: ").lower()
-
+    
+    # Choosing a menu option
     def mainmenu(self):
         self.loop = True
         while self.loop:
@@ -124,6 +128,7 @@ def findInfo(array, info, item):
     return -1
 
 # Login and register menu functions 
+# Register Function
 def register():
     username = input("\nWhat would you like your username to be? ")
     password = input("What would you like your password to be? ")
@@ -137,6 +142,7 @@ def register():
         "total": firstdep
     }
 
+# Login Function 
 def login():
     usernameInput = input("Username: ")
     foundUser = findInfo(users, "username", usernameInput)
@@ -154,6 +160,7 @@ def login():
         print("No account found.")
         loginmenu()
 
+# Starting Menu : Login or Register Screen
 def loginmenu():
     regOrLog = input("Would you like to register or login? ").lower() 
     if regOrLog == "login":

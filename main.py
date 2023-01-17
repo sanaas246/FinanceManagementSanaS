@@ -93,7 +93,6 @@ class Menu:
                 print(index)
                 print("User not found.")
 
-
     # Main menu functions 
     def getMenuSelection(self):
         # Menu Options Display

@@ -1,1 +1,1 @@
-[{"username": "yucca", "password": "yuki", "total": [80, "January", "2023"]}, {"username": "bill", "password": "nye", "total": [15, "wewe", "4343"]}, {"username": "peter", "password": "pan", "total": [70, "January", "2024"]}]
+[{"username": "yucca", "password": "yuki", "total": [290, "June", "2023"]}, {"username": "bill", "password": "nye", "total": [15, "wewe", "4343"]}, {"username": "peter", "password": "pan", "total": [50, "June", "2023"]}]

@@ -33,6 +33,12 @@ class Menu:
                 return i
         return -1
 
+    # Change the total in an account
+    def changetotal(self, towhom, changemonth, changeyear, changetot):
+        users[towhom]["total"][1] = changemonth
+        users[towhom]["total"][2] = changeyear
+        users[towhom]["total"][0] = changetot
+
     # Menu selection functions
     # Display Account Info
     def displayall(self):
@@ -45,9 +51,9 @@ class Menu:
         if int(withdrawalsum) > int(users[foundUserLi[0]]["total"][0]):
             print("Withdrawal amount larger than account total. Withdrawal cannot be made.")
         else:
-            users[foundUserLi[0]]["total"][1] = input("What month is this withdrawal occuring? ")
-            users[foundUserLi[0]]["total"][2] = input("What year is this withdrawal occuring? ")
-            users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) - int(withdrawalsum)
+            withdrawalmonth = input("What month is this withdrawal occuring? ")
+            withdrawalyear = input("What year is this withdrawal occuring? ")
+            self.changetotal(foundUserLi[0], withdrawalmonth, withdrawalyear, int(users[foundUserLi[0]]["total"][0]) - int(withdrawalsum))
             print("Withdrawal Amount:",withdrawalsum)
             print("New Total:",users[foundUserLi[0]]["total"][0])
             print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
@@ -56,9 +62,9 @@ class Menu:
     # Deposit money and when it is occurring 
     def deposit(self):
         depositsum = input("How much money would you like to deposit? ")
-        users[foundUserLi[0]]["total"][1] = input("What month is this withdrawal occuring? ")
-        users[foundUserLi[0]]["total"][2] = input("What year is this withdrawal occuring? ")
-        users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) + int(depositsum)
+        depositmonth =input("What month is this withdrawal occuring? ")
+        deposityear = input("What year is this withdrawal occuring? ")
+        self.changetotal(foundUserLi[0], depositmonth, deposityear, int(users[foundUserLi[0]]["total"][0]) + int(depositsum))
         print("Deposit Amount:",depositsum)
         print("New Total:",users[foundUserLi[0]]["total"][0])
         print("Date of Transaction: ",users[foundUserLi[0]]["total"][1],",",users[foundUserLi[0]]["total"][2])
@@ -77,13 +83,12 @@ class Menu:
             index = self.searchuser(transferperson)
             # If the user is found, add money to their account, remove money from user account
             if index != -1:
-                users[index]["total"][1] = transfermonth
-                users[index]["total"][2] = transferyear
-                users[index]["total"][0] = int(users[index]["total"][0]) + int(transfersum)
+                self.changetotal(index, transfermonth, transferyear, int(users[index]["total"][0]) + int(transfersum))
                 users[foundUserLi[0]]["total"][1] = transfermonth
                 users[foundUserLi[0]]["total"][2] = transferyear
                 users[foundUserLi[0]]["total"][0] = int(users[foundUserLi[0]]["total"][0]) - int(transfersum)
                 print("Transfer completed.")
+                addtojson()
             else:
                 print(index)
                 print("User not found.")
@@ -114,8 +119,9 @@ class Menu:
                 self.deposit()
             elif selection == "4" or selection == "transfer money to another user":
                 self.transfer()
-            elif selection == "4" or selection == "exit":
+            elif selection == "5" or selection == "exit":
                 self.loop = False
+                addtojson()
                 print("Bye!")
 
 menu = Menu()
